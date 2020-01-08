@@ -1,4 +1,4 @@
-package epam.rd.traydakalo.restservice;
+package epam.rd.traydakalo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
