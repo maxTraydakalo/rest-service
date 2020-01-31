@@ -12,23 +12,23 @@ public class ClaimController {
         this.claimService = claimService;
     }
 
-    @GetMapping("/claim/{id}")
-    public Claim getClaim(@PathVariable Long id){
+    @GetMapping("/claims/{id}")
+    public Claim getClaim(@PathVariable Long id) {
         return claimService.findById(id);
     }
 
     @PostMapping("/claim")
-    public Claim saveClaim(@RequestBody Claim claim){
+    public Claim saveClaim(@RequestBody Claim claim) {
         return claimService.save(claim);
     }
 
     @PutMapping("/claim")
-    public Claim updateClaim(@RequestBody Claim claim){
+    public Claim updateClaim(@RequestBody Claim claim) {
         return claimService.updateClaim(claim);
     }
 
     @DeleteMapping("/claim")
-    public void deleteClaim(@RequestBody Claim claim){
+    public void deleteClaim(@RequestBody Claim claim) {
         claimService.deleteClaim(claim);
     }
 }

@@ -1,9 +1,6 @@
 package epam.rd.traydakalo.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Claim {
@@ -14,6 +11,9 @@ public class Claim {
     private String name;
     private String description;
     private Boolean isDone;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Employee employee;
 
     public Claim() {
     }

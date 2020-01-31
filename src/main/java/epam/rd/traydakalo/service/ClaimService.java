@@ -4,10 +4,12 @@ import epam.rd.traydakalo.entity.Claim;
 import epam.rd.traydakalo.exceptions.NoSuchClaimException;
 import epam.rd.traydakalo.repository.ClaimRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MultipartResolver;
 
 @Service
 public class ClaimService {
-    ClaimRepository claimRepository;
+    private final ClaimRepository claimRepository;
 
     public ClaimService(ClaimRepository claimRepository) {
         this.claimRepository = claimRepository;
