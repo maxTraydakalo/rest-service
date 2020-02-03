@@ -1,6 +1,22 @@
-insert into employee (id, name, surname) values (1, 'max', 'traydakalo');
+create sequence hibernate_sequence start with 1 increment by 1;
 
-insert into claim (id, description, is_done, name, employee_id) values (1, 'desc', false, 'claim ', 1);
-insert into claim (id, description, is_done, name, employee_id) values (2, 'desc', false, 'claim ', 1);
-insert into claim (id, description, is_done, name, employee_id) values (3, 'desc', false, 'claim ', 1);
-insert into claim (id, description, is_done, name) values (4, 'desc', false, 'claim ');
+create table claim
+(
+    id          bigint not null,
+    description varchar(255),
+    is_done     boolean,
+    name        varchar(255),
+    employee_id bigint,
+    primary key (id)
+);
+
+create table employee
+(
+    id      bigint not null,
+    name    varchar(255),
+    surname varchar(255),
+    primary key (id)
+);
+
+alter table claim
+    add constraint FKoi7uxmi4i56j4e9lwkgf4757m foreign key (employee_id) references employee;
