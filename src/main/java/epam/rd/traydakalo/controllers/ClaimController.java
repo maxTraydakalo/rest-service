@@ -2,6 +2,9 @@ package epam.rd.traydakalo.controllers;
 
 import epam.rd.traydakalo.entity.Claim;
 import epam.rd.traydakalo.service.ClaimService;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +18,11 @@ public class ClaimController {
     @GetMapping("/claims/{id}")
     public Claim getClaim(@PathVariable Long id) {
         return claimService.findById(id);
+    }
+
+    @GetMapping(value = "/claims", params = {"page", "size"})
+    public Page<Claim> getClaimsPage(Pageable pageable) {
+        return claimService.findAll(pageable);
     }
 
     @PostMapping("/claim")
