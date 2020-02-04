@@ -1,19 +1,18 @@
 package epam.rd.traydakalo.entity;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 
 @Entity
 public class Claim {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
     private Boolean isDone;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Employee employee;
+    private ZonedDateTime claimedAt;
 
     public Claim() {
     }
@@ -48,5 +47,13 @@ public class Claim {
 
     public void setDone(Boolean done) {
         isDone = done;
+    }
+
+    public ZonedDateTime getClaimedAt() {
+        return claimedAt;
+    }
+
+    public void setClaimedAt(ZonedDateTime claimedAt) {
+        this.claimedAt = claimedAt;
     }
 }

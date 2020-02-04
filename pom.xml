@@ -67,6 +67,11 @@
             <artifactId>flyway-core</artifactId>
             <version>6.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -88,16 +93,8 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>6.2.0</version>
                 <configuration>
-                    <url>jdbc:h2:mem:testdb</url>
-                    <user>sa</user>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <driver>com.mysql.cj.jdbc.Driver</driver>
+                    <url>jdbc:mysql://localhost:3306/rest_service</url>
                 </configuration>
             </plugin>
         </plugins>
