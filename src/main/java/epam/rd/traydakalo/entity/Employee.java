@@ -12,6 +12,10 @@ public class Employee {
     private String name;
     private String surname;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id")
+    private List<Claim> claims;
+
 
     public Employee() {
     }
@@ -39,10 +43,6 @@ public class Employee {
     public void setSurname(String surname) {
         this.surname = surname;
     }
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id")
-    private List<Claim> claims;
 
     public List<Claim> getClaims() {
         return claims;

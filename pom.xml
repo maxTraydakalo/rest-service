@@ -95,9 +95,21 @@
                 <configuration>
                     <driver>com.mysql.cj.jdbc.Driver</driver>
                     <url>jdbc:mysql://localhost:3306/rest_service</url>
+                    <user>root</user>
+                    <password>Rotterdam1998</password>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
+<!--    <configuration>-->
+<!--        <systemPropertyVariables>-->
+<!--            <flyway.driver>org.h2.Driver</flyway.driver>-->
+<!--            <flyway.url>jdbc:postgresql://localhost:5432/epmrduahpp</flyway.url>-->
+<!--            <flyway.locations>classpath:/db/testdata</flyway.locations>-->
+<!--        </systemPropertyVariables>-->
+<!--        <includes>-->
+<!--            <include>**/*Test.java</include>-->
+<!--        </includes>-->
+<!--        <threadCount>1</threadCount>-->
+<!--    </configuration>-->
 </project>
