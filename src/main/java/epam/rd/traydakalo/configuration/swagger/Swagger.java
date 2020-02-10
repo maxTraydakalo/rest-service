@@ -1,4 +1,4 @@
-package epam.rd.traydakalo.configuration;
+package epam.rd.traydakalo.configuration.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

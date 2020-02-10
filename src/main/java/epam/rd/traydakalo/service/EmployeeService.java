@@ -25,6 +25,6 @@ public class EmployeeService {
 
     @Query
     public Employee findByClaimsId(Long id) {
-        return employeeRepository.findByClaimsId(1L);
+        return employeeRepository.findByClaimsId(id).orElseThrow(NoSuchEmployeeException::new);
     }
 }

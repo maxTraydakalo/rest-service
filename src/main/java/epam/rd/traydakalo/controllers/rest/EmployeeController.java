@@ -1,4 +1,4 @@
-package epam.rd.traydakalo.controllers;
+package epam.rd.traydakalo.controllers.rest;
 
 import epam.rd.traydakalo.entity.Employee;
 import epam.rd.traydakalo.service.EmployeeService;
