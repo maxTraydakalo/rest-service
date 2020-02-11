@@ -14,6 +14,7 @@ public class Employee {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
+//    @NamedEntityGraph(name = )
     private List<Claim> claims;
 
 

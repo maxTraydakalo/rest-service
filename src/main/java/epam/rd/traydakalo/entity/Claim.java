@@ -1,10 +1,11 @@
 package epam.rd.traydakalo.entity;
 
 import javax.persistence.*;
+import java.io.Externalizable;
 import java.time.ZonedDateTime;
 
 @Entity
-public class Claim {
+public class Claim /*extends Externalizable*/ {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

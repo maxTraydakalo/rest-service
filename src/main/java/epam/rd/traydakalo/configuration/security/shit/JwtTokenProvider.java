@@ -1,7 +1,24 @@
-//package epam.rd.traydakalo.configuration.security.jwt;
+//package epam.rd.traydakalo.configuration.security.shit;
 //
 //
+//import epam.rd.traydakalo.entity.Authority;
+//import epam.rd.traydakalo.entity.Claim;
+//import epam.rd.traydakalo.entity.User;
+//import io.jsonwebtoken.*;
+//import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+//import org.springframework.security.core.Authentication;
+//import epam.rd.traydakalo.service.UserService;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.stereotype.Component;
+//
+//import javax.annotation.PostConstruct;
+//import javax.servlet.http.HttpServletRequest;
+//import java.util.Base64;
+//import java.util.Collection;
+//import java.util.Date;
+//import java.util.Set;
 //
 //@Component
 //public class JwtTokenProvider {
@@ -20,14 +37,19 @@
 //    @Value("${jwt.token.expire-length}") // 1h
 //    private long validityInMilliseconds;
 //
-//    private UserDetailsService userDetailsService;
+//
+//    private UserService userService;
+//
+//    public JwtTokenProvider(UserService userService) {
+//        this.userService = userService;
+//    }
 //
 //    @PostConstruct
 //    protected void init() {
 //        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 //    }
 //
-//    public String createToken(String userName, Set<Role> roles) {
+//    public String createToken(String userName, Collection<? extends GrantedAuthority> roles) {
 //        Claims claims = Jwts.claims().setSubject(userName);
 //        claims.put(ROLES, roles);
 //
@@ -47,8 +69,8 @@
 //    }
 //
 //    public Authentication getAuthentication(String token) {
-//        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
-//        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+//        User user = this.userService.findUserByEmail(getUsername(token));
+//        return new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());
 //    }
 //
 //    public String resolveToken(HttpServletRequest req) {
@@ -67,7 +89,7 @@
 //            }
 //            return true;
 //        } catch (JwtException | IllegalArgumentException e) {
-//            throw new InvalidJwtAuthenticationException(EXPIRED_OR_INVALID_JWT_TOKEN);
+//            throw new RuntimeException();
 //        }
 //    }
 //}
