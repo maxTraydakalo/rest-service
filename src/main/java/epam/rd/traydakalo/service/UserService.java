@@ -22,10 +22,10 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return findUserByEmail(username);
+        return userRepository.findUserByUsername(username).orElseThrow(NoSuchUserException::new);
     }
 
-    public User findUserByEmail(String username) {
+    public User getUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findUserByUsername(username).orElseThrow(NoSuchUserException::new);
     }
 
