@@ -1,3 +1,4 @@
+/*
 package epam.rd.traydakalo.service;
 
 import epam.rd.traydakalo.configuration.security.jwt.JwtTokenProvider;
@@ -39,3 +40,4 @@ public class LoginService {
         return token;
     }
 }
+*/
