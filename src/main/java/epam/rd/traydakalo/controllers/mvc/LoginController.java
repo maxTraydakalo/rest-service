@@ -29,7 +29,7 @@ import static org.springframework.http.ResponseEntity.ok;
 public class LoginController {
 
     private static String authorizationRequestBaseUri
-            = "oauth2/authorize-client";
+            = "/login/oauth2/authorization";
     Map<String, String> oauth2AuthenticationUrls
             = new HashMap<>();
 
