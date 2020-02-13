@@ -11,6 +11,9 @@ import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.endpoint.NimbusAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
@@ -72,17 +75,26 @@ public class SecurityBeans {
                 CLIENT_PROPERTY_KEY + client + ".client-secret");
 
         if (client.equals("google")) {
-            return CommonOAuth2Provider.GOOGLE.getBuilder(client)
-                    .clientId(clientId).clientSecret(clientSecret)
+            return CommonOAuth2Provider.GOOGLE
+                    .getBuilder(client)
+                    .clientId(clientId)
+                    .clientSecret(clientSecret)
                     .redirectUriTemplate("{baseUrl}/login/oauth2/{registrationId}")
                     .build();
         }
         if (client.equals("github")) {
-            return CommonOAuth2Provider.GITHUB.getBuilder(client)
+            return CommonOAuth2Provider.GITHUB
+                    .getBuilder(client)
                     .clientId(clientId).clientSecret(clientSecret)
                     .redirectUriTemplate("{baseUrl}/login/oauth2/{registrationId}")
                     .build();
         }
         return null;
+    }
+
+    @Bean
+    public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest>
+    accessTokenResponseClient() {
+        return new NimbusAuthorizationCodeTokenResponseClient();
     }
 }

@@ -19,6 +19,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
@@ -59,6 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     OAuth2AuthorizedClientService authorizedClientService;
     @Autowired
     AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository;
+    @Autowired
+    OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> oAuth2AccessTokenResponseClient;
 //    @Bean
 //    public DaoAuthenticationProvider authProvider() {
 //        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -78,24 +82,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
-                    .authorizationEndpoint()
-                        .baseUri("/login/oauth2/authorization")
-                        .authorizationRequestRepository(authorizationRequestRepository)
-                    .and()
-                    .redirectionEndpoint()
-                        .baseUri("/login/oauth2/*")
-                    .and()
-                    .defaultSuccessUrl("/loginSuccess")
+                .loginPage("/login")
+                .clientRegistrationRepository(clientRegistrationRepository)
+                .authorizedClientService(authorizedClientService)
+                .authorizationEndpoint()
+                .baseUri("/login/oauth2/authorization")
+                .authorizationRequestRepository(authorizationRequestRepository)
+                .and()
+                .redirectionEndpoint()
+                .baseUri("/login/oauth2/*")
+                .and()
+                .tokenEndpoint()
+                .accessTokenResponseClient(oAuth2AccessTokenResponseClient)
+                .and()
+//                .userInfoEndpoint().userService().userService()
+                .defaultSuccessUrl("/loginSuccess");
+
 //                .and()
 //                .tokenEndpoint()
 //                .accessTokenResponseClient()
-                    .loginPage("/login")
-                        .clientRegistrationRepository(clientRegistrationRepository)
-                        .authorizedClientService(authorizedClientService)
-
-                .and()
-
-        ;
     }
 /*    @Override
     protected void configure(HttpSecurity http) throws Exception {
