@@ -21,11 +21,14 @@ import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClient
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.Arrays;
 import java.util.List;
@@ -63,6 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository;
     @Autowired
     OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> oAuth2AccessTokenResponseClient;
+//    @Autowired
+//    OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService;
 //    @Bean
 //    public DaoAuthenticationProvider authProvider() {
 //        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -95,8 +100,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenEndpoint()
                 .accessTokenResponseClient(oAuth2AccessTokenResponseClient)
                 .and()
+                .userInfoEndpoint()
+//                .oidcUserService(oidcUserService)
+//                .userService()
+//                .customUserType(, )
+                .and()
+//                .userInfoEndpoint().userAuthoritiesMapper()
 //                .userInfoEndpoint().userService().userService()
                 .defaultSuccessUrl("/loginSuccess");
+
 
 //                .and()
 //                .tokenEndpoint()
