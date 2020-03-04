@@ -18,21 +18,31 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient;
 
 @Configuration
 @EnableWebSecurity
@@ -83,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //                .and()
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
+                .antMatchers("/login", "/loginSuccess").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
@@ -100,14 +110,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenEndpoint()
                 .accessTokenResponseClient(oAuth2AccessTokenResponseClient)
                 .and()
-                .userInfoEndpoint()
+                .userInfoEndpoint();
 //                .oidcUserService(oidcUserService)
 //                .userService()
 //                .customUserType(, )
-                .and()
-//                .userInfoEndpoint().userAuthoritiesMapper()
-//                .userInfoEndpoint().userService().userService()
-                .defaultSuccessUrl("/loginSuccess");
+//                .and()
+////                .userInfoEndpoint().userAuthoritiesMapper()
+////                .userInfoEndpoint().userService().userService()
+//                .defaultSuccessUrl("/loginSuccess");
 
 
 //                .and()
@@ -132,15 +142,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .apply(new JwtSecurityConfigurer(jwtTokenProvider));
     }*/
 
-//    @Override
-//    @Autowired
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.authenticationProvider(myAuthProvider);
-//    }
+    @Bean
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService(WebClient rest) {
+        OidcUserService delegate = new OidcUserService();
+        return request -> {
+            OAuth2User user = delegate.loadUser((OidcUserRequest) request);
+            if (!"github".equals(request.getClientRegistration().getRegistrationId())) {
+                return user;
+            }
 
-//    @Bean
-//    @Override
-//    public AuthenticationManager authenticationManagerBean() throws Exception {
-//        return super.authenticationManagerBean();
-//    }
+            OAuth2AuthorizedClient client = new OAuth2AuthorizedClient
+                    (request.getClientRegistration(), user.getName(), request.getAccessToken());
+            String url = user.getAttribute("organizations_url");
+            List<Map<String, Object>> orgs = rest
+                    .get().uri(url)
+                    .attributes(oauth2AuthorizedClient(client))
+                    .retrieve()
+                    .bodyToMono(List.class)
+                    .block();
+
+            if (orgs.stream().anyMatch(org -> "spring-projects".equals(org.get("login")))) {
+                return user;
+            }
+
+            throw new OAuth2AuthenticationException(new OAuth2Error("invalid_token", "Not in Spring Team", ""));
+        };
+    }
 }
