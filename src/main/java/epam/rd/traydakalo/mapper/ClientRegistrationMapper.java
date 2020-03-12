@@ -43,3 +43,4 @@ public interface ClientRegistrationMapper {
     })
     ClientRecord ClientRegistrationToClientRecord(ClientRegistration clientRegistration);
 }
+

@@ -7,19 +7,18 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class A implements OAuth2AuthorizedClientService {
+public class OAuthAuthorizedUserService implements OAuth2AuthorizedClientService {
     OAuthUserService oAuthUserService;
 
-    public A(OAuthUserService oAuthUserService) {
+    public OAuthAuthorizedUserService(OAuthUserService oAuthUserService) {
         this.oAuthUserService = oAuthUserService;
     }
 
     @Override
-    public  OAuth2AuthorizedClient loadAuthorizedClient(String clientRegistrationId, String principalName) {
+    public OAuth2AuthorizedClient loadAuthorizedClient(String clientRegistrationId, String principalName) {
         return oAuthUserService.loadAuthorizedClient(clientRegistrationId, principalName);
     }
 
-    //TODO create nested class for oauth user and
     @Override
     public void saveAuthorizedClient(OAuth2AuthorizedClient authorizedClient, Authentication principal) {
         oAuthUserService.saveOAuthUser(authorizedClient);
@@ -27,6 +26,6 @@ public class A implements OAuth2AuthorizedClientService {
 
     @Override
     public void removeAuthorizedClient(String clientRegistrationId, String principalName) {
-
+        oAuthUserService.deleteOAuthUser(clientRegistrationId, principalName);
     }
 }

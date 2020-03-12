@@ -7,4 +7,7 @@ import java.util.Optional;
 
 public interface OAuthUserRepository extends CrudRepository<OAuthUser, Long> {
     Optional<OAuthUser> findByClientRecord_RegistrationIdAndPrincipalName(String clientRecord_registrationId, String principalName);
+
+    @Override
+    void deleteById(Long aLong);
 }
